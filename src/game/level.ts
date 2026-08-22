@@ -1,4 +1,4 @@
-import type { Enemy, LevelData, Pickup } from './types';
+import type { Enemy, LevelData, Pickup } from './types.js';
 
 export const LEVEL: LevelData = {
   rows: [

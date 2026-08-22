@@ -1,51 +1,143 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
-  <title id="title">Pocket Hell — playable browser raycaster</title>
-  <desc id="desc">A light retro handheld console containing a green monochrome first-person shooter, surrounded by developer notes.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">Pocket Hell 2.0</title>
+  <desc id="desc">A premium retro handheld containing a playable green monochrome raycasting FPS.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#e9e3d6"/></linearGradient>
-    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f3f1eb"/><stop offset="1" stop-color="#c7c3ba"/></linearGradient>
-    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c4d27a"/><stop offset="1" stop-color="#81924d"/></linearGradient>
-    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#efb18e"/><stop offset="1" stop-color="#c97857"/></linearGradient>
-    <filter id="shadow" x="-30%" y="-30%" width="160%" height="190%"><feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#40382c" flood-opacity=".24"/></filter>
-    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#bdb39f" stroke-width="1" opacity=".25"/></pattern>
-    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="2" fill="#15230f" opacity=".1"/></pattern>
+    <linearGradient id="background" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#172019"/>
+      <stop offset="0.55" stop-color="#0c120e"/>
+      <stop offset="1" stop-color="#080b09"/>
+    </linearGradient>
+    <radialGradient id="halo">
+      <stop stop-color="#92ae58" stop-opacity=".28"/>
+      <stop offset="1" stop-color="#92ae58" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#f5f3ec"/>
+      <stop offset=".46" stop-color="#d9d7ce"/>
+      <stop offset="1" stop-color="#aaa99f"/>
+    </linearGradient>
+    <linearGradient id="bezel" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#555a56"/>
+      <stop offset="1" stop-color="#202522"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1">
+      <stop stop-color="#a8bb61"/>
+      <stop offset="1" stop-color="#768743"/>
+    </linearGradient>
+    <linearGradient id="button" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#a94578"/>
+      <stop offset="1" stop-color="#571d40"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#dce5d9" stroke-opacity=".035"/>
+    </pattern>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse">
+      <rect width="4" height="2" fill="#0f380f" opacity=".11"/>
+    </pattern>
+    <filter id="deviceShadow" x="-40%" y="-30%" width="180%" height="190%">
+      <feDropShadow dx="0" dy="30" stdDeviation="27" flood-color="#000" flood-opacity=".52"/>
+    </filter>
+    <filter id="softShadow" x="-30%" y="-30%" width="160%" height="180%">
+      <feDropShadow dx="0" dy="12" stdDeviation="13" flood-color="#000" flood-opacity=".3"/>
+    </filter>
   </defs>
-  <rect width="1200" height="675" fill="url(#bg)"/>
-  <rect width="1200" height="675" fill="url(#grid)"/>
-  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
-    <text x="64" y="80" font-size="20" letter-spacing="4" fill="#61713d">TYPESCRIPT · CANVAS 2D · NO ENGINE</text>
-    <text x="62" y="151" font-size="64" font-weight="800" fill="#242b1a">POCKET HELL</text>
-    <text x="64" y="195" font-size="24" fill="#566044">Play a tiny FPS. Open the code. Learn how raycasting works.</text>
-    <g transform="translate(62 246)">
-      <rect width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
-      <text x="24" y="30" font-size="16" fill="#667343">PLAY</text><text x="24" y="55" font-size="19" fill="#252b20">Keyboard · mouse · touch</text>
-      <rect y="92" width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
-      <text x="24" y="122" font-size="16" fill="#667343">STUDY</text><text x="24" y="147" font-size="19" fill="#252b20">Rays · sprites · AI · audio</text>
-      <rect y="184" width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
-      <text x="24" y="214" font-size="16" fill="#667343">MODIFY</text><text x="24" y="239" font-size="19" fill="#252b20">Readable beginner modules</text>
+
+  <rect width="1280" height="720" fill="url(#background)"/>
+  <rect width="1280" height="720" fill="url(#grid)"/>
+  <ellipse cx="808" cy="342" rx="470" ry="360" fill="url(#halo)"/>
+
+  <g font-family="Inter, Arial, sans-serif">
+    <g transform="translate(70 64)">
+      <rect width="43" height="43" rx="12" fill="#151c17" stroke="#dce5d9" stroke-opacity=".25"/>
+      <path d="M9 21h20M19 11v20" stroke="#cee49a" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="34" cy="15" r="3" fill="#cee49a"/><circle cx="29" cy="25" r="3" fill="#cee49a"/>
+      <text x="58" y="19" fill="#f4f1e7" font-family="ui-monospace, monospace" font-size="17" font-weight="800" letter-spacing="2">POCKET HELL</text>
+      <text x="58" y="39" fill="#a6bd70" font-family="ui-monospace, monospace" font-size="10" font-weight="800" letter-spacing="2">RAYCASTER // BUILD 2.0</text>
     </g>
-    <g transform="translate(552 48)" filter="url(#shadow)">
-      <path d="M20 496c-38 6-82 43-98 94h220l20-84z" fill="url(#skin)"/>
-      <path d="M480 496c38 6 82 43 98 94H358l-20-84z" fill="url(#skin)"/>
-      <rect width="500" height="570" rx="48" fill="url(#shell)" stroke="#a8a49d" stroke-width="4"/>
-      <rect x="58" y="50" width="384" height="264" rx="24" fill="#4b4b48"/>
-      <rect x="84" y="76" width="332" height="210" rx="11" fill="url(#screen)" stroke="#26331c" stroke-width="8"/>
-      <rect x="88" y="80" width="324" height="202" fill="url(#scan)"/>
-      <g fill="none" stroke="#26331c" stroke-width="10" stroke-linecap="square">
-        <path d="M93 181L145 126 197 176 244 119 289 173 337 128 407 185"/>
-        <path d="M93 235L160 191 230 224 284 182 342 227 407 192"/>
+
+    <g transform="translate(70 190)">
+      <text fill="#a6bd70" font-family="ui-monospace, monospace" font-size="12" font-weight="800" letter-spacing="2">A TINY FPS ENGINE YOU CAN HOLD</text>
+      <text y="78" fill="#f4f1e7" font-size="58" font-weight="850" letter-spacing="-3">Play the code.</text>
+      <text y="139" fill="#f4f1e7" font-size="58" font-weight="850" letter-spacing="-3">Learn the engine.</text>
+      <text y="191" fill="#9ba49c" font-size="20">A real TypeScript raycaster, interactive controls,</text>
+      <text y="222" fill="#9ba49c" font-size="20">procedural media and a GitHub-powered leaderboard.</text>
+
+      <g transform="translate(0 271)" font-family="ui-monospace, monospace" font-size="11" font-weight="800">
+        <rect width="156" height="42" rx="11" fill="#cee49a"/>
+        <text x="23" y="26" fill="#101611">PLAY IN BROWSER</text>
+        <rect x="170" width="146" height="42" rx="11" fill="#151c17" stroke="#e1e8df" stroke-opacity=".16"/>
+        <text x="194" y="26" fill="#e1e8df">VIEW SOURCE ↗</text>
       </g>
-      <g fill="#29361f"><rect x="248" y="138" width="14" height="76"/><rect x="218" y="168" width="74" height="15"/><circle cx="255" cy="139" r="18"/><rect x="235" y="204" width="40" height="46"/></g>
-      <text x="91" y="272" font-size="15" fill="#28351e">HP 100  AMMO 18  DEMONS 0/4</text>
-      <text x="70" y="350" font-size="18" letter-spacing="3" fill="#4b5362">POCKET SYSTEM · PH-1993</text>
-      <g transform="translate(92 392)" fill="#30312f"><rect x="34" width="46" height="126" rx="8"/><rect y="40" width="114" height="46" rx="8"/><circle cx="57" cy="63" r="19" fill="#171817"/></g>
-      <g transform="translate(330 432)"><circle cx="0" cy="0" r="35" fill="#8e315a" stroke="#61213e" stroke-width="6"/><circle cx="78" cy="-42" r="35" fill="#8e315a" stroke="#61213e" stroke-width="6"/></g>
-      <text x="324" y="518" font-size="22" fill="#334262">B</text><text x="402" y="476" font-size="22" fill="#334262">A</text>
-      <rect x="205" y="525" width="48" height="13" rx="7" fill="#555650"/><rect x="271" y="525" width="48" height="13" rx="7" fill="#555650"/>
-      <text x="202" y="557" font-size="13" fill="#5a6267">SELECT</text><text x="276" y="557" font-size="13" fill="#5a6267">START</text>
-      <ellipse cx="105" cy="475" rx="45" ry="68" fill="url(#skin)" transform="rotate(-22 105 475)"/>
-      <ellipse cx="397" cy="455" rx="45" ry="68" fill="url(#skin)" transform="rotate(24 397 455)"/>
+
+      <g transform="translate(0 348)" font-family="ui-monospace, monospace" font-size="10" font-weight="800" fill="#bdc8ba">
+        <rect width="110" height="31" rx="16" fill="#cfe49a" fill-opacity=".07" stroke="#cfe49a" stroke-opacity=".18"/>
+        <text x="17" y="20">TYPESCRIPT</text>
+        <rect x="121" width="105" height="31" rx="16" fill="#cfe49a" fill-opacity=".07" stroke="#cfe49a" stroke-opacity=".18"/>
+        <text x="141" y="20">CANVAS 2D</text>
+        <rect x="237" width="99" height="31" rx="16" fill="#cfe49a" fill-opacity=".07" stroke="#cfe49a" stroke-opacity=".18"/>
+        <text x="257" y="20">NO ENGINE</text>
+      </g>
     </g>
-    <text x="64" y="626" font-size="18" fill="#6b725e">A real playable browser project — not a video inside a mockup.</text>
   </g>
+
+  <g transform="translate(750 35)">
+    <rect x="0" y="0" width="400" height="640" rx="27" fill="url(#shell)" stroke="#7c7d76" stroke-opacity=".55"/>
+    <path d="M8 14h384M8 18h384" stroke="#777971" stroke-opacity=".2"/>
+    <text x="28" y="46" fill="#424a44" font-family="ui-monospace, monospace" font-size="8" font-weight="800" letter-spacing="2">POCKET SYSTEM</text>
+    <text x="285" y="46" fill="#424a44" font-family="ui-monospace, monospace" font-size="8" font-weight="800" letter-spacing="1">PH-1993 // 01</text>
+
+    <g transform="translate(27 62)">
+      <rect width="346" height="272" rx="20" fill="url(#bezel)" stroke="#181c19"/>
+      <rect x="4" y="4" width="338" height="264" rx="17" fill="none" stroke="#81847e" stroke-width="3" opacity=".75"/>
+      <circle cx="24" cy="24" r="4" fill="#e0543d"/>
+      <text x="35" y="27" fill="#e9ece6" fill-opacity=".72" font-family="ui-monospace, monospace" font-size="8" letter-spacing="1">POWER</text>
+      <text x="202" y="27" fill="#e9ece6" fill-opacity=".72" font-family="ui-monospace, monospace" font-size="8" letter-spacing="1">DOT MATRIX // STEREO</text>
+      <rect x="24" y="39" width="298" height="207" rx="8" fill="#152018" stroke="#101411" stroke-width="8"/>
+      <rect x="31" y="46" width="284" height="193" rx="3" fill="url(#screen)"/>
+      <rect x="31" y="46" width="284" height="193" fill="url(#scan)"/>
+
+      <g stroke="#263a20" stroke-width="11" fill="none" stroke-linejoin="round">
+        <path d="M34 132L78 85 127 126 166 80 211 125 256 88 312 137"/>
+        <path d="M34 196L85 160 134 190 179 151 228 191 312 151"/>
+      </g>
+      <g fill="#263a20">
+        <path d="M162 106l20 14-8 24h-25l-7-24z"/>
+        <rect x="154" y="143" width="20" height="34"/>
+        <rect x="141" y="148" width="47" height="11"/>
+        <path d="M150 177l-10 34h15l9-23 9 23h16l-11-34z"/>
+      </g>
+      <g fill="#172718" font-family="ui-monospace, monospace" font-size="13" font-weight="900">
+        <text x="42" y="229">HP 100</text><text x="124" y="229">AMMO 18</text><text x="235" y="229">0 / 4</text>
+      </g>
+    </g>
+
+    <g font-family="ui-monospace, monospace">
+      <text x="31" y="365" fill="#334d76" font-size="20" font-weight="900" letter-spacing="-2">POCKET <tspan fill="#7c345e" font-style="italic" font-size="24">HELL</tspan></text>
+      <text x="245" y="364" fill="#334d76" font-size="7" font-weight="900">PERSONAL RAYCASTING</text>
+      <text x="277" y="375" fill="#334d76" font-size="7" font-weight="900">COMPUTER</text>
+    </g>
+
+    <g transform="translate(45 410)" fill="#232825">
+      <rect x="42" y="0" width="44" height="128" rx="8"/>
+      <rect x="0" y="42" width="128" height="44" rx="8"/>
+      <circle cx="64" cy="64" r="21" fill="#171b18"/>
+    </g>
+    <g transform="translate(278 450) rotate(-10)">
+      <circle cx="0" cy="45" r="34" fill="url(#button)" stroke="#4b1737" stroke-width="4"/>
+      <circle cx="67" cy="0" r="34" fill="url(#button)" stroke="#4b1737" stroke-width="4"/>
+      <text x="-5" y="50" fill="#f2dce9" font-family="ui-monospace, monospace" font-weight="900">B</text>
+      <text x="62" y="5" fill="#f2dce9" font-family="ui-monospace, monospace" font-weight="900">A</text>
+    </g>
+    <g transform="translate(161 544) rotate(-8)">
+      <rect width="44" height="14" rx="8" fill="#313633"/>
+      <rect x="57" width="44" height="14" rx="8" fill="#313633"/>
+      <text x="4" y="30" fill="#334d76" font-family="ui-monospace, monospace" font-size="7" font-weight="900">SOUND</text>
+      <text x="61" y="30" fill="#334d76" font-family="ui-monospace, monospace" font-size="7" font-weight="900">START</text>
+    </g>
+    <g transform="translate(278 566) rotate(-24)" fill="#73756e">
+      <rect width="6" height="39" rx="3"/><rect x="14" width="6" height="39" rx="3"/><rect x="28" width="6" height="39" rx="3"/><rect x="42" width="6" height="39" rx="3"/><rect x="56" width="6" height="39" rx="3"/>
+    </g>
+  </g>
+
+  <text x="70" y="675" fill="#7f8b80" font-family="ui-monospace, monospace" font-size="11" font-weight="800" letter-spacing="2">PLAY · LEARN · MODIFY · SHARE</text>
 </svg>

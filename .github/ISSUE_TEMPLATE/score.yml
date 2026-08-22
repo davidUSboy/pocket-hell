@@ -1,0 +1,67 @@
+name: Pocket Hell community score
+description: Publish a completed run to the GitHub-powered leaderboard
+title: "[POCKET HELL SCORE] PLAYER 1 — 000000"
+labels: [leaderboard]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        <!-- POCKET_HELL_SCORE_V2 -->
+        The live game fills these values automatically after a victory. Manual entries are accepted on an honor system.
+
+  - type: input
+    id: player
+    attributes:
+      label: Player
+      placeholder: PLAYER 1
+    validations:
+      required: true
+
+  - type: input
+    id: score
+    attributes:
+      label: Score
+      placeholder: "000000"
+    validations:
+      required: true
+
+  - type: input
+    id: time
+    attributes:
+      label: Time
+      description: Completion time in seconds, for example 84.3
+      placeholder: "84.3"
+    validations:
+      required: true
+
+  - type: input
+    id: kills
+    attributes:
+      label: Kills
+      placeholder: "4"
+    validations:
+      required: true
+
+  - type: input
+    id: health
+    attributes:
+      label: Health
+      placeholder: "64"
+    validations:
+      required: true
+
+  - type: input
+    id: ammo
+    attributes:
+      label: Ammo
+      placeholder: "7"
+    validations:
+      required: true
+
+  - type: input
+    id: run-id
+    attributes:
+      label: Run ID
+      placeholder: ph-xxxxxxxx
+    validations:
+      required: true

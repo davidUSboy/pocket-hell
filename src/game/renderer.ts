@@ -1,6 +1,6 @@
-import { FOV, PALETTE, SCREEN_HEIGHT, SCREEN_WIDTH, VIEW_HEIGHT } from './constants';
-import type { Pickup, RayHit, RenderState } from './types';
-import type { LevelMap } from './level';
+import { FOV, PALETTE, SCREEN_HEIGHT, SCREEN_WIDTH, VIEW_HEIGHT } from './constants.js';
+import type { Pickup, RayHit, RenderState } from './types.js';
+import type { LevelMap } from './level.js';
 
 const SHADES = [PALETTE.light, PALETTE.mid, PALETTE.dark, PALETTE.darkest] as const;
 

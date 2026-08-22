@@ -1,7 +1,7 @@
 {
   "name": "pocket-hell",
-  "version": "1.0.0",
-  "description": "A beginner-friendly DOOM-style raycasting FPS built from scratch with TypeScript and Canvas 2D.",
+  "version": "2.0.0",
+  "description": "A premium handheld raycasting FPS built from scratch with TypeScript, Canvas 2D and a GitHub-powered community leaderboard.",
   "private": true,
   "type": "module",
   "author": "Aleksei Lavrentev",
@@ -21,15 +21,19 @@
     "game-development",
     "retro-game",
     "github-pages",
-    "beginner-friendly"
+    "leaderboard",
+    "beginner-friendly",
+    "pwa",
+    "mobile-game"
   ],
   "scripts": {
-    "dev": "vite",
-    "build": "tsc --noEmit && vite build",
+    "dev": "npm run compile:browser && vite",
+    "build": "npm run compile:browser && tsc --noEmit && vite build",
     "preview": "vite preview",
     "typecheck": "tsc --noEmit",
     "validate": "node scripts/validate.mjs",
-    "check": "npm run validate && npm run build"
+    "check": "npm run validate && npm run build",
+    "compile:browser": "tsc -p tsconfig.static.json"
   },
   "devDependencies": {
     "typescript": "5.9.3",

@@ -1,5 +1,5 @@
-import type { Action } from '../game/types';
-import type { InputManager } from '../game/input';
+import type { Action } from '../game/types.js';
+import type { InputManager } from '../game/input.js';
 
 const LEFT_ACTIONS: Action[] = ['forward', 'backward', 'turnLeft', 'turnRight'];
 const RIGHT_ACTIONS: Action[] = ['shoot', 'use', 'pause'];
