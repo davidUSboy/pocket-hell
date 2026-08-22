@@ -1,0 +1,42 @@
+{
+  "name": "pocket-hell",
+  "version": "1.0.0",
+  "description": "A beginner-friendly DOOM-style raycasting FPS built from scratch with TypeScript and Canvas 2D.",
+  "private": true,
+  "type": "module",
+  "author": "Aleksei Lavrentev",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidUSboy/pocket-hell.git"
+  },
+  "homepage": "https://davidusboy.github.io/pocket-hell/",
+  "bugs": {
+    "url": "https://github.com/davidUSboy/pocket-hell/issues"
+  },
+  "keywords": [
+    "raycasting",
+    "typescript",
+    "canvas",
+    "game-development",
+    "retro-game",
+    "github-pages",
+    "beginner-friendly"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "validate": "node scripts/validate.mjs",
+    "check": "npm run validate && npm run build"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2",
+    "vite": "7.1.3"
+  },
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "packageManager": "npm@10.9.2"
+}

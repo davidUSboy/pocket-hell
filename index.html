@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Pocket Hell is a beginner-friendly DOOM-style raycasting game written from scratch in TypeScript and Canvas 2D."
+    />
+    <meta name="theme-color" content="#f4f2e8" />
+    <meta name="author" content="Aleksei Lavrentev" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Pocket Hell — Beginner Raycaster" />
+    <meta
+      property="og:description"
+      content="Play and study a tiny DOOM-style raycasting FPS built from scratch with TypeScript and Canvas 2D."
+    />
+    <meta property="og:url" content="https://davidusboy.github.io/pocket-hell/" />
+    <meta
+      property="og:image"
+      content="https://davidusboy.github.io/pocket-hell/social-preview.svg"
+    />
+    <meta property="og:image:width" content="1280" />
+    <meta property="og:image:height" content="640" />
+    <meta property="og:image:alt" content="Pocket Hell raycasting game inside a retro handheld" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pocket Hell — Beginner Raycaster" />
+    <meta
+      name="twitter:description"
+      content="A playable raycasting FPS and beginner-friendly game-dev codebase."
+    />
+    <meta
+      name="twitter:image"
+      content="https://davidusboy.github.io/pocket-hell/social-preview.svg"
+    />
+    <meta name="twitter:image:alt" content="Pocket Hell raycasting game inside a retro handheld" />
+    <link rel="canonical" href="https://davidusboy.github.io/pocket-hell/" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <title>Pocket Hell — Beginner Raycaster</title>
+  </head>
+  <body>
+    <div class="page-grid" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#top" aria-label="Pocket Hell home">
+        <span class="brand-mark" aria-hidden="true">PH</span>
+        <span>
+          <strong>POCKET HELL</strong>
+          <small>BEGINNER RAYCASTER</small>
+        </span>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#play">Play</a>
+        <a href="#learn">Learn</a>
+        <a href="#architecture">Architecture</a>
+        <a class="github-link" data-repo-link href="#architecture">View source ↗</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero" id="play">
+        <div class="hero-copy">
+          <p class="eyebrow">A TINY FPS ENGINE IN YOUR BROWSER</p>
+          <h1>Learn how old-school 3D games work by playing one.</h1>
+          <p class="hero-description">
+            A compact DOOM-style raycaster built from scratch with TypeScript,
+            Canvas 2D, procedural pixel art and zero game assets.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-cta" data-demo-link href="https://davidusboy.github.io/pocket-hell/">
+              Play the live demo <span>▶</span>
+            </a>
+            <a class="secondary-cta" data-repo-link href="https://github.com/davidUSboy/pocket-hell">
+              Read the source <span>↗</span>
+            </a>
+          </div>
+          <div class="hero-tags" aria-label="Project technologies">
+            <span>TypeScript</span>
+            <span>Canvas 2D</span>
+            <span>No engine</span>
+            <span>GitHub Pages</span>
+          </div>
+          <div class="desktop-controls">
+            <strong>Desktop controls</strong>
+            <span>WASD / arrows — move</span>
+            <span>Space — shoot</span>
+            <span>F — use door</span>
+            <span>Enter — pause</span>
+          </div>
+        </div>
+
+        <div class="device-stage" id="device-stage">
+          <div class="hand hand-left" aria-hidden="true">
+            <span class="palm"></span>
+            <span class="finger finger-a"></span>
+            <span class="finger finger-b"></span>
+          </div>
+          <div class="hand hand-right" aria-hidden="true">
+            <span class="palm"></span>
+            <span class="finger finger-a"></span>
+            <span class="finger finger-b"></span>
+          </div>
+
+          <div class="console" aria-label="Pocket Hell handheld game">
+            <div class="console-topline">
+              <span>POCKET SYSTEM</span>
+              <span>PH-1993</span>
+            </div>
+
+            <div class="screen-bezel">
+              <div class="screen-labels">
+                <span>DOT MATRIX</span>
+                <span class="power-dot"></span>
+                <span>STEREO</span>
+              </div>
+              <div class="screen-wrap">
+                <canvas
+                  id="game-canvas"
+                  width="160"
+                  height="144"
+                  aria-label="Pocket Hell game screen"
+                ></canvas>
+                <div class="screen-glass" aria-hidden="true"></div>
+              </div>
+            </div>
+
+            <div class="device-name">
+              <strong>POCKET <em>HELL</em></strong>
+              <span>RAYCASTING COMPUTER</span>
+            </div>
+
+            <div class="controls-panel">
+              <div class="dpad" aria-label="Directional controls">
+                <button class="dpad-button dpad-up" data-action="forward" aria-label="Move forward"></button>
+                <button class="dpad-button dpad-right" data-action="turnRight" aria-label="Turn right"></button>
+                <button class="dpad-button dpad-down" data-action="backward" aria-label="Move backward"></button>
+                <button class="dpad-button dpad-left" data-action="turnLeft" aria-label="Turn left"></button>
+                <span class="dpad-center" aria-hidden="true"></span>
+              </div>
+
+              <div class="middle-buttons">
+                <button class="pill-button" data-action="pause" aria-label="Start or pause game"></button>
+                <span>START</span>
+              </div>
+
+              <div class="action-cluster" aria-label="Action controls">
+                <div class="action-control action-b">
+                  <button class="round-button" data-action="use" aria-label="Use or open door">B</button>
+                  <span>USE</span>
+                </div>
+                <div class="action-control action-a">
+                  <button class="round-button" data-action="shoot" aria-label="Shoot">A</button>
+                  <span>FIRE</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="speaker" aria-hidden="true">
+              <span></span><span></span><span></span><span></span><span></span>
+            </div>
+          </div>
+
+          <div class="thumb thumb-left" aria-hidden="true"><span class="nail"></span></div>
+          <div class="thumb thumb-right" aria-hidden="true"><span class="nail"></span></div>
+
+          <div class="live-status" aria-live="polite">
+            <span><small>HEALTH</small><strong id="health-value">100</strong></span>
+            <span><small>AMMO</small><strong id="ammo-value">18</strong></span>
+            <span><small>DEMONS</small><strong id="enemy-value">0/0</strong></span>
+          </div>
+        </div>
+      </section>
+
+      <section class="learning-section" id="learn">
+        <div class="section-heading">
+          <p class="eyebrow">PLAY IT. BREAK IT. REBUILD IT.</p>
+          <h2>One small project, six real game-dev systems.</h2>
+          <p>
+            Every feature is intentionally separated into readable modules so a
+            beginner can study one system without understanding the entire codebase.
+          </p>
+        </div>
+        <div class="feature-grid">
+          <article>
+            <span class="feature-number">01</span>
+            <h3>Raycasting</h3>
+            <p>DDA grid traversal turns a 2D map into a pseudo-3D world, one vertical screen column at a time.</p>
+          </article>
+          <article>
+            <span class="feature-number">02</span>
+            <h3>Collision</h3>
+            <p>Circle-based player collision keeps movement smooth while preventing walls and doors from being crossed.</p>
+          </article>
+          <article>
+            <span class="feature-number">03</span>
+            <h3>Enemy AI</h3>
+            <p>Enemies detect line of sight, chase the player, attack at close range and react to weapon hits.</p>
+          </article>
+          <article>
+            <span class="feature-number">04</span>
+            <h3>Input</h3>
+            <p>Keyboard, pointer and touch controls share one action layer, including animated thumbs that mirror the player.</p>
+          </article>
+          <article>
+            <span class="feature-number">05</span>
+            <h3>Audio</h3>
+            <p>Gunshots, pickups and damage sounds are synthesized through Web Audio, so no copyrighted sound files are needed.</p>
+          </article>
+          <article>
+            <span class="feature-number">06</span>
+            <h3>Deployment</h3>
+            <p>A GitHub Actions workflow type-checks, builds and publishes the project automatically to GitHub Pages.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="architecture-section" id="architecture">
+        <div class="section-heading compact">
+          <p class="eyebrow">REPOSITORY TOUR</p>
+          <h2>Small enough to read. Structured enough to grow.</h2>
+        </div>
+        <div class="architecture-layout">
+          <pre class="file-tree" aria-label="Project file tree"><code>src/
+├── game/
+│   ├── audio.ts       # procedural sound
+│   ├── constants.ts   # balancing values
+│   ├── game.ts        # update loop + rules
+│   ├── input.ts       # keyboard + touch
+│   ├── level.ts       # map + entities
+│   ├── renderer.ts    # raycaster + sprites
+│   └── types.ts       # shared data models
+├── ui/
+│   └── hands.ts       # animated controls
+├── main.ts            # bootstrap
+└── style.css          # handheld + page UI</code></pre>
+          <div class="architecture-copy">
+            <div>
+              <span>1</span>
+              <p><strong>Start in <code>level.ts</code>.</strong> Change the number grid and immediately create a new map.</p>
+            </div>
+            <div>
+              <span>2</span>
+              <p><strong>Open <code>renderer.ts</code>.</strong> Follow one ray from camera to wall and see how distance becomes height.</p>
+            </div>
+            <div>
+              <span>3</span>
+              <p><strong>Experiment in <code>game.ts</code>.</strong> Tune movement, enemy speed, damage, ammo and victory conditions.</p>
+            </div>
+            <a class="source-cta" data-repo-link href="#top">Explore the source on GitHub <span>↗</span></a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Built as an educational open-source project. No proprietary DOOM or Nintendo assets are included.</p>
+      <a data-repo-link href="#top">MIT licensed source ↗</a>
+    </footer>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

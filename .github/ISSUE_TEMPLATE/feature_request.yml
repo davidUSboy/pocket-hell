@@ -1,0 +1,26 @@
+name: Feature request
+description: Suggest a focused improvement for Pocket Hell.
+title: "[Feature]: "
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What would this improve?
+      description: Explain the learning, gameplay, accessibility or code-quality problem.
+    validations:
+      required: true
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed solution
+      description: Keep the idea small enough for a beginner-friendly repository.
+    validations:
+      required: true
+  - type: checkboxes
+    id: legal
+    attributes:
+      label: Asset check
+      options:
+        - label: This proposal does not require proprietary DOOM, Nintendo or other commercial assets.
+          required: true

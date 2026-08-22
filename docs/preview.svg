@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="675" viewBox="0 0 1200 675" role="img" aria-labelledby="title desc">
+  <title id="title">Pocket Hell — playable browser raycaster</title>
+  <desc id="desc">A light retro handheld console containing a green monochrome first-person shooter, surrounded by developer notes.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fbfaf5"/><stop offset="1" stop-color="#e9e3d6"/></linearGradient>
+    <linearGradient id="shell" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#f3f1eb"/><stop offset="1" stop-color="#c7c3ba"/></linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#c4d27a"/><stop offset="1" stop-color="#81924d"/></linearGradient>
+    <linearGradient id="skin" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#efb18e"/><stop offset="1" stop-color="#c97857"/></linearGradient>
+    <filter id="shadow" x="-30%" y="-30%" width="160%" height="190%"><feDropShadow dx="0" dy="24" stdDeviation="24" flood-color="#40382c" flood-opacity=".24"/></filter>
+    <pattern id="grid" width="28" height="28" patternUnits="userSpaceOnUse"><path d="M28 0H0V28" fill="none" stroke="#bdb39f" stroke-width="1" opacity=".25"/></pattern>
+    <pattern id="scan" width="4" height="4" patternUnits="userSpaceOnUse"><rect width="4" height="2" fill="#15230f" opacity=".1"/></pattern>
+  </defs>
+  <rect width="1200" height="675" fill="url(#bg)"/>
+  <rect width="1200" height="675" fill="url(#grid)"/>
+  <g font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace">
+    <text x="64" y="80" font-size="20" letter-spacing="4" fill="#61713d">TYPESCRIPT · CANVAS 2D · NO ENGINE</text>
+    <text x="62" y="151" font-size="64" font-weight="800" fill="#242b1a">POCKET HELL</text>
+    <text x="64" y="195" font-size="24" fill="#566044">Play a tiny FPS. Open the code. Learn how raycasting works.</text>
+    <g transform="translate(62 246)">
+      <rect width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
+      <text x="24" y="30" font-size="16" fill="#667343">PLAY</text><text x="24" y="55" font-size="19" fill="#252b20">Keyboard · mouse · touch</text>
+      <rect y="92" width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
+      <text x="24" y="122" font-size="16" fill="#667343">STUDY</text><text x="24" y="147" font-size="19" fill="#252b20">Rays · sprites · AI · audio</text>
+      <rect y="184" width="348" height="76" rx="16" fill="#fff" fill-opacity=".72" stroke="#b8b19f"/>
+      <text x="24" y="214" font-size="16" fill="#667343">MODIFY</text><text x="24" y="239" font-size="19" fill="#252b20">Readable beginner modules</text>
+    </g>
+    <g transform="translate(552 48)" filter="url(#shadow)">
+      <path d="M20 496c-38 6-82 43-98 94h220l20-84z" fill="url(#skin)"/>
+      <path d="M480 496c38 6 82 43 98 94H358l-20-84z" fill="url(#skin)"/>
+      <rect width="500" height="570" rx="48" fill="url(#shell)" stroke="#a8a49d" stroke-width="4"/>
+      <rect x="58" y="50" width="384" height="264" rx="24" fill="#4b4b48"/>
+      <rect x="84" y="76" width="332" height="210" rx="11" fill="url(#screen)" stroke="#26331c" stroke-width="8"/>
+      <rect x="88" y="80" width="324" height="202" fill="url(#scan)"/>
+      <g fill="none" stroke="#26331c" stroke-width="10" stroke-linecap="square">
+        <path d="M93 181L145 126 197 176 244 119 289 173 337 128 407 185"/>
+        <path d="M93 235L160 191 230 224 284 182 342 227 407 192"/>
+      </g>
+      <g fill="#29361f"><rect x="248" y="138" width="14" height="76"/><rect x="218" y="168" width="74" height="15"/><circle cx="255" cy="139" r="18"/><rect x="235" y="204" width="40" height="46"/></g>
+      <text x="91" y="272" font-size="15" fill="#28351e">HP 100  AMMO 18  DEMONS 0/4</text>
+      <text x="70" y="350" font-size="18" letter-spacing="3" fill="#4b5362">POCKET SYSTEM · PH-1993</text>
+      <g transform="translate(92 392)" fill="#30312f"><rect x="34" width="46" height="126" rx="8"/><rect y="40" width="114" height="46" rx="8"/><circle cx="57" cy="63" r="19" fill="#171817"/></g>
+      <g transform="translate(330 432)"><circle cx="0" cy="0" r="35" fill="#8e315a" stroke="#61213e" stroke-width="6"/><circle cx="78" cy="-42" r="35" fill="#8e315a" stroke="#61213e" stroke-width="6"/></g>
+      <text x="324" y="518" font-size="22" fill="#334262">B</text><text x="402" y="476" font-size="22" fill="#334262">A</text>
+      <rect x="205" y="525" width="48" height="13" rx="7" fill="#555650"/><rect x="271" y="525" width="48" height="13" rx="7" fill="#555650"/>
+      <text x="202" y="557" font-size="13" fill="#5a6267">SELECT</text><text x="276" y="557" font-size="13" fill="#5a6267">START</text>
+      <ellipse cx="105" cy="475" rx="45" ry="68" fill="url(#skin)" transform="rotate(-22 105 475)"/>
+      <ellipse cx="397" cy="455" rx="45" ry="68" fill="url(#skin)" transform="rotate(24 397 455)"/>
+    </g>
+    <text x="64" y="626" font-size="18" fill="#6b725e">A real playable browser project — not a video inside a mockup.</text>
+  </g>
+</svg>

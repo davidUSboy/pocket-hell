@@ -1,0 +1,17 @@
+{
+  "name": "Pocket Hell — Beginner Raycaster",
+  "short_name": "Pocket Hell",
+  "description": "A beginner-friendly DOOM-style raycasting FPS built with TypeScript and Canvas 2D.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f5f3ea",
+  "theme_color": "#f4f2e8",
+  "icons": [
+    {
+      "src": "./favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

@@ -1,0 +1,446 @@
+import {
+  MOVE_SPEED,
+  PLAYER_RADIUS,
+  ROTATION_SPEED,
+  SHOT_COOLDOWN,
+  STARTING_AMMO,
+  STARTING_HEALTH,
+  STRAFE_SPEED,
+  USE_DISTANCE,
+} from './constants';
+import { AudioEngine } from './audio';
+import { InputManager } from './input';
+import { createEnemies, createPickups, LEVEL, LevelMap } from './level';
+import { Renderer } from './renderer';
+import type { Enemy, GameMode, Pickup, Player, RenderState } from './types';
+
+export interface GameStats {
+  health: number;
+  ammo: number;
+  kills: number;
+  enemies: number;
+}
+
+export type StatsListener = (stats: GameStats) => void;
+
+export class PocketHellGame {
+  private level: LevelMap;
+  private renderer: Renderer;
+  private readonly audio = new AudioEngine();
+  private player: Player;
+  private enemies: Enemy[];
+  private pickups: Pickup[];
+  private mode: GameMode = 'title';
+  private lastFrame = performance.now();
+  private elapsed = 0;
+  private weaponCooldown = 0;
+  private weaponKick = 0;
+  private damageFlash = 0;
+  private message = '';
+  private messageTime = 0;
+  private showMap = false;
+
+  constructor(
+    private readonly canvas: HTMLCanvasElement,
+    private readonly input: InputManager,
+    private readonly onStats: StatsListener,
+  ) {
+    this.level = new LevelMap(LEVEL.rows);
+    this.renderer = new Renderer(canvas, this.level);
+    this.player = this.createPlayer();
+    this.enemies = createEnemies();
+    this.pickups = createPickups();
+  }
+
+  start(): void {
+    requestAnimationFrame(this.frame);
+  }
+
+  private readonly frame = (now: number): void => {
+    const deltaTime = Math.min(0.05, Math.max(0, (now - this.lastFrame) / 1000));
+    this.lastFrame = now;
+    this.elapsed += deltaTime;
+
+    this.update(deltaTime);
+    this.renderer.render(this.createRenderState());
+    this.publishStats();
+
+    requestAnimationFrame(this.frame);
+  };
+
+  private update(deltaTime: number): void {
+    this.weaponKick = Math.max(0, this.weaponKick - deltaTime * 7);
+    this.damageFlash = Math.max(0, this.damageFlash - deltaTime * 2.8);
+    this.weaponCooldown = Math.max(0, this.weaponCooldown - deltaTime);
+    this.updateMessage(deltaTime);
+
+    if (this.mode === 'title') {
+      if (
+        this.input.consumePress('pause') ||
+        this.input.consumePress('shoot') ||
+        this.input.consumePress('use')
+      ) {
+        this.beginRun();
+      }
+      return;
+    }
+
+    if (this.mode === 'dead' || this.mode === 'won') {
+      if (
+        this.input.consumePress('pause') ||
+        this.input.consumePress('shoot') ||
+        this.input.consumePress('use')
+      ) {
+        this.resetWorld();
+        this.beginRun();
+      }
+      return;
+    }
+
+    if (this.input.consumePress('pause')) {
+      this.mode = this.mode === 'paused' ? 'running' : 'paused';
+      this.setMessage(this.mode === 'paused' ? 'GAME PAUSED' : 'BACK TO HELL', 1.1);
+    }
+
+    if (this.mode === 'paused') {
+      return;
+    }
+
+    if (this.input.consumePress('toggleMap')) {
+      this.showMap = !this.showMap;
+      this.setMessage(this.showMap ? 'DEBUG MAP ON' : 'DEBUG MAP OFF', 1.1);
+    }
+
+    this.updatePlayer(deltaTime);
+
+    if (this.input.consumePress('shoot')) {
+      this.shoot();
+    }
+
+    if (this.input.consumePress('use')) {
+      this.use();
+    }
+
+    this.updateEnemies(deltaTime);
+    this.updatePickups();
+    this.checkExit();
+  }
+
+  private beginRun(): void {
+    this.mode = 'running';
+    this.setMessage('CLEAR 4 DEMONS — FIND EXIT', 3.2);
+  }
+
+  private resetWorld(): void {
+    this.level = new LevelMap(LEVEL.rows);
+    this.renderer = new Renderer(this.canvas, this.level);
+    this.player = this.createPlayer();
+    this.enemies = createEnemies();
+    this.pickups = createPickups();
+    this.weaponCooldown = 0;
+    this.weaponKick = 0;
+    this.damageFlash = 0;
+    this.showMap = false;
+    this.message = '';
+    this.messageTime = 0;
+  }
+
+  private createPlayer(): Player {
+    return {
+      x: LEVEL.player.x,
+      y: LEVEL.player.y,
+      angle: LEVEL.player.angle,
+      health: STARTING_HEALTH,
+      ammo: STARTING_AMMO,
+      kills: 0,
+    };
+  }
+
+  private updatePlayer(deltaTime: number): void {
+    const forwardInput = Number(this.input.isHeld('forward')) - Number(this.input.isHeld('backward'));
+    const turnInput = Number(this.input.isHeld('turnRight')) - Number(this.input.isHeld('turnLeft'));
+    const strafeInput = Number(this.input.isHeld('strafeRight')) - Number(this.input.isHeld('strafeLeft'));
+
+    this.player.angle = this.normalizeAngle(
+      this.player.angle + turnInput * ROTATION_SPEED * deltaTime,
+    );
+
+    const forwardDistance = forwardInput * MOVE_SPEED * deltaTime;
+    const strafeDistance = strafeInput * STRAFE_SPEED * deltaTime;
+    const directionX = Math.cos(this.player.angle);
+    const directionY = Math.sin(this.player.angle);
+    const rightX = Math.cos(this.player.angle + Math.PI / 2);
+    const rightY = Math.sin(this.player.angle + Math.PI / 2);
+
+    let moveX = directionX * forwardDistance + rightX * strafeDistance;
+    let moveY = directionY * forwardDistance + rightY * strafeDistance;
+    const movementLength = Math.hypot(moveX, moveY);
+    const maximumLength = MOVE_SPEED * deltaTime;
+
+    if (movementLength > maximumLength && movementLength > 0) {
+      moveX = (moveX / movementLength) * maximumLength;
+      moveY = (moveY / movementLength) * maximumLength;
+    }
+
+    this.movePlayer(moveX, moveY);
+  }
+
+  private movePlayer(deltaX: number, deltaY: number): void {
+    const nextX = this.player.x + deltaX;
+    const nextY = this.player.y + deltaY;
+
+    if (this.canOccupy(nextX, this.player.y, PLAYER_RADIUS)) {
+      this.player.x = nextX;
+    }
+
+    if (this.canOccupy(this.player.x, nextY, PLAYER_RADIUS)) {
+      this.player.y = nextY;
+    }
+  }
+
+  private canOccupy(x: number, y: number, radius: number): boolean {
+    return (
+      !this.level.isBlocking(x - radius, y - radius) &&
+      !this.level.isBlocking(x + radius, y - radius) &&
+      !this.level.isBlocking(x - radius, y + radius) &&
+      !this.level.isBlocking(x + radius, y + radius)
+    );
+  }
+
+  private shoot(): void {
+    if (this.weaponCooldown > 0) {
+      return;
+    }
+
+    this.weaponCooldown = SHOT_COOLDOWN;
+    this.weaponKick = 1;
+
+    if (this.player.ammo <= 0) {
+      this.audio.empty();
+      this.setMessage('CLICK — OUT OF AMMO', 1.2);
+      return;
+    }
+
+    this.player.ammo -= 1;
+    this.audio.shot();
+
+    let target: Enemy | null = null;
+    let targetDistance = Number.POSITIVE_INFINITY;
+
+    for (const enemy of this.enemies) {
+      if (!enemy.alive) {
+        continue;
+      }
+
+      const deltaX = enemy.x - this.player.x;
+      const deltaY = enemy.y - this.player.y;
+      const distance = Math.hypot(deltaX, deltaY);
+      const angleToEnemy = Math.atan2(deltaY, deltaX);
+      const angleDifference = Math.abs(this.shortestAngle(angleToEnemy - this.player.angle));
+      const hitWindow = Math.max(0.035, Math.atan(0.32 / distance));
+
+      if (
+        angleDifference < hitWindow &&
+        distance < targetDistance &&
+        this.hasLineOfSight(this.player.x, this.player.y, enemy.x, enemy.y)
+      ) {
+        target = enemy;
+        targetDistance = distance;
+      }
+    }
+
+    if (!target) {
+      return;
+    }
+
+    target.health -= 1;
+    target.hitFlash = 0.16;
+    this.audio.hit();
+
+    if (target.health <= 0) {
+      target.alive = false;
+      this.player.kills += 1;
+      this.setMessage(
+        this.player.kills === this.enemies.length ? 'ALL CLEAR — FIND EXIT' : 'DEMON DOWN',
+        1.6,
+      );
+    } else {
+      this.setMessage('DIRECT HIT', 0.8);
+    }
+  }
+
+  private use(): void {
+    const targetX = Math.floor(this.player.x + Math.cos(this.player.angle) * USE_DISTANCE);
+    const targetY = Math.floor(this.player.y + Math.sin(this.player.angle) * USE_DISTANCE);
+    const tile = this.level.getTile(targetX, targetY);
+
+    if (tile === 3) {
+      this.level.setTile(targetX, targetY, 0);
+      this.audio.door();
+      this.setMessage('DOOR OPENED', 1.1);
+    } else {
+      this.setMessage('NOTHING TO USE', 0.7);
+    }
+  }
+
+  private updateEnemies(deltaTime: number): void {
+    for (const enemy of this.enemies) {
+      if (!enemy.alive) {
+        continue;
+      }
+
+      enemy.attackCooldown = Math.max(0, enemy.attackCooldown - deltaTime);
+      enemy.hitFlash = Math.max(0, enemy.hitFlash - deltaTime);
+
+      const deltaX = this.player.x - enemy.x;
+      const deltaY = this.player.y - enemy.y;
+      const distance = Math.hypot(deltaX, deltaY);
+      const canSeePlayer = distance < 8 && this.hasLineOfSight(enemy.x, enemy.y, this.player.x, this.player.y);
+
+      if (!canSeePlayer) {
+        continue;
+      }
+
+      if (distance > 0.7) {
+        const speed = 0.56 * deltaTime;
+        const directionX = deltaX / distance;
+        const directionY = deltaY / distance;
+        const nextX = enemy.x + directionX * speed;
+        const nextY = enemy.y + directionY * speed;
+
+        if (this.canEnemyOccupy(nextX, enemy.y, enemy.id)) {
+          enemy.x = nextX;
+        }
+        if (this.canEnemyOccupy(enemy.x, nextY, enemy.id)) {
+          enemy.y = nextY;
+        }
+      } else if (enemy.attackCooldown <= 0) {
+        enemy.attackCooldown = 0.9;
+        this.player.health = Math.max(0, this.player.health - 12);
+        this.damageFlash = 1;
+        this.audio.hurt();
+        this.setMessage('YOU TOOK DAMAGE', 0.8);
+
+        if (this.player.health <= 0) {
+          this.mode = 'dead';
+          this.input.releaseAll();
+          return;
+        }
+      }
+    }
+  }
+
+  private canEnemyOccupy(x: number, y: number, enemyId: number): boolean {
+    if (!this.canOccupy(x, y, 0.18)) {
+      return false;
+    }
+
+    return this.enemies.every((other) => {
+      if (!other.alive || other.id === enemyId) {
+        return true;
+      }
+      return Math.hypot(other.x - x, other.y - y) > 0.35;
+    });
+  }
+
+  private updatePickups(): void {
+    for (const pickup of this.pickups) {
+      if (!pickup.active || Math.hypot(pickup.x - this.player.x, pickup.y - this.player.y) > 0.42) {
+        continue;
+      }
+
+      if (pickup.kind === 'health') {
+        if (this.player.health >= STARTING_HEALTH) {
+          continue;
+        }
+        this.player.health = Math.min(STARTING_HEALTH, this.player.health + 30);
+        this.setMessage('HEALTH +30', 1.2);
+      } else {
+        this.player.ammo = Math.min(30, this.player.ammo + 8);
+        this.setMessage('AMMO +8', 1.2);
+      }
+
+      pickup.active = false;
+      this.audio.pickup();
+    }
+  }
+
+  private checkExit(): void {
+    if (this.level.getTile(this.player.x, this.player.y) !== 9) {
+      return;
+    }
+
+    if (this.player.kills < this.enemies.length) {
+      this.setMessage('EXIT LOCKED — CLEAR DEMONS', 1.2);
+      return;
+    }
+
+    this.mode = 'won';
+    this.audio.win();
+    this.input.releaseAll();
+  }
+
+  private hasLineOfSight(startX: number, startY: number, endX: number, endY: number): boolean {
+    const distance = Math.hypot(endX - startX, endY - startY);
+    const steps = Math.max(1, Math.ceil(distance / 0.07));
+
+    for (let index = 1; index < steps; index += 1) {
+      const progress = index / steps;
+      const sampleX = startX + (endX - startX) * progress;
+      const sampleY = startY + (endY - startY) * progress;
+      if (this.level.isBlocking(sampleX, sampleY)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  private updateMessage(deltaTime: number): void {
+    if (this.messageTime <= 0) {
+      return;
+    }
+
+    this.messageTime = Math.max(0, this.messageTime - deltaTime);
+    if (this.messageTime === 0) {
+      this.message = '';
+    }
+  }
+
+  private setMessage(message: string, duration: number): void {
+    this.message = message;
+    this.messageTime = duration;
+  }
+
+  private createRenderState(): RenderState {
+    return {
+      mode: this.mode,
+      player: this.player,
+      enemies: this.enemies,
+      pickups: this.pickups,
+      weaponKick: this.weaponKick,
+      damageFlash: this.damageFlash,
+      elapsed: this.elapsed,
+      message: this.message,
+      showMap: this.showMap,
+    };
+  }
+
+  private publishStats(): void {
+    this.onStats({
+      health: this.player.health,
+      ammo: this.player.ammo,
+      kills: this.player.kills,
+      enemies: this.enemies.length,
+    });
+  }
+
+  private normalizeAngle(angle: number): number {
+    const fullTurn = Math.PI * 2;
+    return ((angle % fullTurn) + fullTurn) % fullTurn;
+  }
+
+  private shortestAngle(angle: number): number {
+    return Math.atan2(Math.sin(angle), Math.cos(angle));
+  }
+}
