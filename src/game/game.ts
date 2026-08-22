@@ -7,21 +7,35 @@ import {
   STARTING_HEALTH,
   STRAFE_SPEED,
   USE_DISTANCE,
-} from './constants';
-import { AudioEngine } from './audio';
-import { InputManager } from './input';
-import { createEnemies, createPickups, LEVEL, LevelMap } from './level';
-import { Renderer } from './renderer';
-import type { Enemy, GameMode, Pickup, Player, RenderState } from './types';
+} from './constants.js';
+import { AudioEngine } from './audio.js';
+import { InputManager } from './input.js';
+import { createEnemies, createPickups, LEVEL, LevelMap } from './level.js';
+import { Renderer } from './renderer.js';
+import type { Enemy, GameMode, Pickup, Player, RenderState } from './types.js';
 
 export interface GameStats {
   health: number;
   ammo: number;
   kills: number;
   enemies: number;
+  mode: GameMode;
+  timeSeconds: number;
+  score: number;
+}
+
+export interface RunResult {
+  outcome: 'won' | 'dead';
+  score: number;
+  timeSeconds: number;
+  health: number;
+  ammo: number;
+  kills: number;
+  runId: string;
 }
 
 export type StatsListener = (stats: GameStats) => void;
+export type FinishListener = (result: RunResult) => void;
 
 export class PocketHellGame {
   private level: LevelMap;
@@ -33,6 +47,9 @@ export class PocketHellGame {
   private mode: GameMode = 'title';
   private lastFrame = performance.now();
   private elapsed = 0;
+  private runElapsed = 0;
+  private runSequence = 0;
+  private runFinished = false;
   private weaponCooldown = 0;
   private weaponKick = 0;
   private damageFlash = 0;
@@ -44,6 +61,7 @@ export class PocketHellGame {
     private readonly canvas: HTMLCanvasElement,
     private readonly input: InputManager,
     private readonly onStats: StatsListener,
+    private readonly onRunComplete: FinishListener = () => undefined,
   ) {
     this.level = new LevelMap(LEVEL.rows);
     this.renderer = new Renderer(canvas, this.level);
@@ -56,10 +74,30 @@ export class PocketHellGame {
     requestAnimationFrame(this.frame);
   }
 
+  pauseForOverlay(): boolean {
+    if (this.mode !== 'running') {
+      return false;
+    }
+
+    this.mode = 'paused';
+    this.input.releaseAll();
+    return true;
+  }
+
+  resumeFromOverlay(): void {
+    if (this.mode === 'paused') {
+      this.mode = 'running';
+    }
+  }
+
   private readonly frame = (now: number): void => {
     const deltaTime = Math.min(0.05, Math.max(0, (now - this.lastFrame) / 1000));
     this.lastFrame = now;
     this.elapsed += deltaTime;
+
+    if (this.mode === 'running') {
+      this.runElapsed += deltaTime;
+    }
 
     this.update(deltaTime);
     this.renderer.render(this.createRenderState());
@@ -128,6 +166,8 @@ export class PocketHellGame {
 
   private beginRun(): void {
     this.mode = 'running';
+    this.runElapsed = 0;
+    this.runFinished = false;
     this.setMessage('CLEAR 4 DEMONS — FIND EXIT', 3.2);
   }
 
@@ -143,6 +183,8 @@ export class PocketHellGame {
     this.showMap = false;
     this.message = '';
     this.messageTime = 0;
+    this.runElapsed = 0;
+    this.runFinished = false;
   }
 
   private createPlayer(): Player {
@@ -322,8 +364,7 @@ export class PocketHellGame {
         this.setMessage('YOU TOOK DAMAGE', 0.8);
 
         if (this.player.health <= 0) {
-          this.mode = 'dead';
-          this.input.releaseAll();
+          this.finishRun('dead');
           return;
         }
       }
@@ -375,9 +416,48 @@ export class PocketHellGame {
       return;
     }
 
-    this.mode = 'won';
-    this.audio.win();
+    this.finishRun('won');
+  }
+
+  private finishRun(outcome: 'won' | 'dead'): void {
+    if (this.runFinished) {
+      return;
+    }
+
+    this.runFinished = true;
+    this.mode = outcome;
     this.input.releaseAll();
+
+    if (outcome === 'won') {
+      this.audio.win();
+    }
+
+    const score = this.calculateScore(outcome);
+    this.runSequence += 1;
+    const runId = `ph-${Date.now().toString(36)}-${this.runSequence.toString(36)}-${score.toString(36)}`;
+
+    this.onRunComplete({
+      outcome,
+      score,
+      timeSeconds: this.runElapsed,
+      health: this.player.health,
+      ammo: this.player.ammo,
+      kills: this.player.kills,
+      runId,
+    });
+  }
+
+  private calculateScore(outcome: 'won' | 'dead' | 'running' = this.mode === 'won' ? 'won' : this.mode === 'dead' ? 'dead' : 'running'): number {
+    if (this.mode === 'title') {
+      return 0;
+    }
+
+    const clearBonus = outcome === 'won' ? 7000 : 0;
+    const speedBonus = outcome === 'dead' ? 0 : Math.max(0, 6000 - Math.floor(this.runElapsed * 35));
+    const killScore = this.player.kills * 1500;
+    const survivalScore = this.player.health * 18;
+    const ammoScore = this.player.ammo * 12;
+    return Math.max(0, Math.round(clearBonus + speedBonus + killScore + survivalScore + ammoScore));
   }
 
   private hasLineOfSight(startX: number, startY: number, endX: number, endY: number): boolean {
@@ -432,6 +512,9 @@ export class PocketHellGame {
       ammo: this.player.ammo,
       kills: this.player.kills,
       enemies: this.enemies.length,
+      mode: this.mode,
+      timeSeconds: this.runElapsed,
+      score: this.calculateScore(),
     });
   }
 

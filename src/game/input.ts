@@ -1,4 +1,4 @@
-import type { Action } from './types';
+import type { Action } from './types.js';
 
 const KEY_BINDINGS: Readonly<Record<string, Action>> = {
   ArrowUp: 'forward',
