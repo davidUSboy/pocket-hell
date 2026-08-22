@@ -1,7 +1,6 @@
 import { PocketHellGame } from './game/game.js';
 import { InputManager } from './game/input.js';
 import { LeaderboardService } from './leaderboard.js';
-import { HandAnimator } from './ui/hands.js';
 const DEFAULT_REPOSITORY_URL = 'https://github.com/davidUSboy/pocket-hell';
 const STAGE_WIDTH = 470;
 const STAGE_HEIGHT = 690;
@@ -49,7 +48,6 @@ const submitScoreValue = requireElement('#submit-score-value');
 const submitScoreLink = requireElement('#submit-score-link');
 const toast = requireElement('#toast');
 const input = new InputManager(document);
-new HandAnimator(stage, input);
 const leaderboard = new LeaderboardService();
 let leaderboardMode = 'community';
 let latestWin = leaderboard.getBestLocal();
@@ -137,14 +135,14 @@ function renderLeaderboard(entries) {
     leaderboardList.replaceChildren();
     if (entries.length === 0) {
         const empty = document.createElement('li');
-        empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="leaderboard-score">000000</span><span class="leaderboard-time">--:--</span>';
+        empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="[...]
         leaderboardList.append(empty);
         return;
     }
     entries.slice(0, 12).forEach((entry, index) => {
         const item = document.createElement('li');
         item.classList.toggle('is-local', entry.source === 'local');
-        item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboard-score">${formatScore(entry.score)}</span><span class="leaderboard-time">${formatTime(entry.time)}</span>`;
+        item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboa[...]
         const player = item.querySelector('.leaderboard-player strong');
         const detail = item.querySelector('.leaderboard-player small');
         if (player)
@@ -165,7 +163,7 @@ async function loadCommunity(force = false) {
         communityLoaded = true;
         if (leaderboardMode === 'community') {
             renderLeaderboard(entries);
-            leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RUN AND CLAIM THE FIRST SLOT';
+            leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RU[...]
         }
     }
     catch (error) {
@@ -192,7 +190,7 @@ function setLeaderboardMode(mode) {
     else {
         const entries = leaderboard.getLocalEntries();
         renderLeaderboard(entries);
-        leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} RUN${entries.length === 1 ? '' : 'S'} SAVED ON THIS DEVICE` : 'NO LOCAL RUNS YET · CLEAR THE FACILITY TO SAVE ONE';
+        leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} RUN${entries.length === 1 ? '' : 'S'} SAVED ON THIS DEVICE` : 'NO LOCAL RUNS YET · CLEAR THE FACILITY TO SAVE ONE'[...]
     }
 }
 function openLeaderboard(mode = leaderboardMode) {
