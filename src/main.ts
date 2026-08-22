@@ -30,7 +30,6 @@ function modeLabel(mode: GameStats['mode']): string {
 }
 
 const canvas = requireElement<HTMLCanvasElement>('#game-canvas');
-const stage = requireElement<HTMLElement>('#device-stage');
 const viewport = requireElement<HTMLElement>('#device-viewport');
 const healthValue = requireElement<HTMLElement>('#health-value');
 const ammoValue = requireElement<HTMLElement>('#ammo-value');
@@ -157,7 +156,7 @@ function renderLeaderboard(entries: ScoreEntry[]): void {
   leaderboardList.replaceChildren();
   if (entries.length === 0) {
     const empty = document.createElement('li');
-    empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="[...]
+    empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="leaderboard-score">000000</span><span class="leaderboard-time">--:--</span>';
     leaderboardList.append(empty);
     return;
   }
@@ -165,7 +164,7 @@ function renderLeaderboard(entries: ScoreEntry[]): void {
   entries.slice(0, 12).forEach((entry, index) => {
     const item = document.createElement('li');
     item.classList.toggle('is-local', entry.source === 'local');
-    item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboard-s[...]
+    item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboard-score">${formatScore(entry.score)}</span><span class="leaderboard-time">${formatTime(entry.time)}</span>`;
 
     const player = item.querySelector<HTMLElement>('.leaderboard-player strong');
     const detail = item.querySelector<HTMLElement>('.leaderboard-player small');
@@ -187,7 +186,7 @@ async function loadCommunity(force = false): Promise<void> {
     communityLoaded = true;
     if (leaderboardMode === 'community') {
       renderLeaderboard(entries);
-      leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RUN AND [...]
+      leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RUN AND CLAIM THE FIRST SLOT';
     }
   } catch (error) {
     if (leaderboardMode === 'community') {

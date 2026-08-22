@@ -22,7 +22,6 @@ function modeLabel(mode) {
     return { title: 'READY', running: 'RUNNING', paused: 'PAUSED', dead: 'K.I.A.', won: 'CLEARED' }[mode];
 }
 const canvas = requireElement('#game-canvas');
-const stage = requireElement('#device-stage');
 const viewport = requireElement('#device-viewport');
 const healthValue = requireElement('#health-value');
 const ammoValue = requireElement('#ammo-value');
@@ -135,14 +134,14 @@ function renderLeaderboard(entries) {
     leaderboardList.replaceChildren();
     if (entries.length === 0) {
         const empty = document.createElement('li');
-        empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="[...]
+        empty.innerHTML = '<span class="leaderboard-rank">--</span><span class="leaderboard-player"><strong>NO RUNS YET</strong><small>Be the first survivor on this board.</small></span><span class="leaderboard-score">000000</span><span class="leaderboard-time">--:--</span>';
         leaderboardList.append(empty);
         return;
     }
     entries.slice(0, 12).forEach((entry, index) => {
         const item = document.createElement('li');
         item.classList.toggle('is-local', entry.source === 'local');
-        item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboa[...]
+        item.innerHTML = `<span class="leaderboard-rank">${String(index + 1).padStart(2, '0')}</span><span class="leaderboard-player"><strong></strong><small></small></span><span class="leaderboard-score">${formatScore(entry.score)}</span><span class="leaderboard-time">${formatTime(entry.time)}</span>`;
         const player = item.querySelector('.leaderboard-player strong');
         const detail = item.querySelector('.leaderboard-player small');
         if (player)
@@ -163,7 +162,7 @@ async function loadCommunity(force = false) {
         communityLoaded = true;
         if (leaderboardMode === 'community') {
             renderLeaderboard(entries);
-            leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RU[...]
+            leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} PUBLIC RUN${entries.length === 1 ? '' : 'S'} · LIVE FROM GITHUB ISSUES` : 'NO PUBLIC SCORES YET · FINISH A RUN AND CLAIM THE FIRST SLOT';
         }
     }
     catch (error) {
@@ -190,7 +189,7 @@ function setLeaderboardMode(mode) {
     else {
         const entries = leaderboard.getLocalEntries();
         renderLeaderboard(entries);
-        leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} RUN${entries.length === 1 ? '' : 'S'} SAVED ON THIS DEVICE` : 'NO LOCAL RUNS YET · CLEAR THE FACILITY TO SAVE ONE'[...]
+        leaderboardStatus.textContent = entries.length > 0 ? `${entries.length} RUN${entries.length === 1 ? '' : 'S'} SAVED ON THIS DEVICE` : 'NO LOCAL RUNS YET · CLEAR THE FACILITY TO SAVE ONE';
     }
 }
 function openLeaderboard(mode = leaderboardMode) {
