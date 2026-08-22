@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pocket-hell-2.0.0';
+const CACHE_NAME = 'pocket-hell-2.0.1';
 const APP_SHELL = ['./', './index.html', './favicon.svg', './site.webmanifest'];
 
 self.addEventListener('install', (event) => {
