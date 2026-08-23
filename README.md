@@ -10,7 +10,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.9-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-617F38?style=flat)](LICENSE)
 
-![Pocket Hell premium handheld browser game](docs/preview.svg)
+![Pocket Hell premium handheld browser game](docs/image.png)
 
 [**Play now**](https://davidusboy.github.io/pocket-hell/) · [Architecture](docs/ARCHITECTURE.md) · [Customization](docs/CUSTOMIZATION.md) · [Contributing](CONTRIBUTING.md)
 
@@ -37,7 +37,7 @@ Version 2.0 is deliberately **game-first**. On phones, including iPhone Safari, 
 ## Mobile experience
 
 <div align="center">
-  <img src="docs/preview.svg" width="720" alt="Pocket Hell premium game-first interface">
+  <img src="docs/image.png" width="720" alt="Pocket Hell premium game-first interface">
 </div>
 
 The responsive layer uses `visualViewport` dimensions rather than relying only on CSS viewport units. Focus mode uses the Fullscreen API where supported and a CSS immersive fallback on iOS. Web Audio context starts with the first game input to comply with browser autoplay policies.
